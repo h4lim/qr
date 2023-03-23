@@ -31,30 +31,33 @@ type QrisTag struct {
 	Tag51 Tag51 `json:"tag_51"`
 }
 type Tag00 struct {
-	Version         string `json:"version"`
-	Type            string `json:"type"`
-	Tag52           string `json:"tag_52"`
-	Tag53           string `json:"tag_53"`
-	Tag58           string `json:"tag_58"`
-	Tag61           string `json:"tag_61"`
-	Tag62           string `json:"tag_62"`
-	Amount          int64  `json:"amount"`
-	MerchantOwner   string `json:"merchant_owner"`
-	MerchantAddress string `json:"merchant_address"`
-	Checksum        string `json:"checksum"`
+	Version         string            `json:"version"`
+	Type            string            `json:"type"`
+	Tag52           string            `json:"tag_52"`
+	Tag53           string            `json:"tag_53"`
+	Tag58           string            `json:"tag_58"`
+	Tag61           string            `json:"tag_61"`
+	Tag62           string            `json:"tag_62"`
+	Amount          int64             `json:"amount"`
+	MerchantOwner   string            `json:"merchant_owner"`
+	MerchantAddress string            `json:"merchant_address"`
+	Checksum        string            `json:"checksum"`
+	UnknownTag      map[string]string `json:"unknown_tag"`
 }
 
 type Tag26 struct {
-	QrOwner            string `json:"qr_owner"`
-	MerchantID         string `json:"merchant_id"`
-	MerchantAcquirerID string `json:"merchant_acquirer_id"`
-	MerchantScale      string `json:"merchant_scale"`
+	QrOwner            string            `json:"qr_owner"`
+	MerchantID         string            `json:"merchant_id"`
+	MerchantAcquirerID string            `json:"merchant_acquirer_id"`
+	MerchantScale      string            `json:"merchant_scale"`
+	UnknownTag         map[string]string `json:"unknown_tag"`
 }
 
 type Tag51 struct {
-	QrisWeb string `json:"qris_web"`
-	QrisID  string `json:"qris_id"`
-	Scale   string `json:"scale"`
+	QrisWeb    string            `json:"qris_web"`
+	QrisID     string            `json:"qris_id"`
+	Scale      string            `json:"scale"`
+	UnknownTag map[string]string `json:"unknown_tag"`
 }
 
 type IQrReader interface {
@@ -120,6 +123,10 @@ func mapData(map00 map[string]string, map26 map[string]string, map51 map[string]
 			qrisTag.Tag00.MerchantAddress = getData(v)
 		case QRIS_CHECKSUM_TAG00:
 			qrisTag.Tag00.Checksum = getData(v)
+		default:
+			mapUnknownTag := make(map[string]string)
+			mapUnknownTag[k] = getData(v)
+			qrisTag.Tag00.UnknownTag = mapUnknownTag
 		}
 	}
 
@@ -133,6 +140,10 @@ func mapData(map00 map[string]string, map26 map[string]string, map51 map[string]
 			qrisTag.Tag26.MerchantAcquirerID = getData(v)
 		case QRIS_MERCHANT_SCALE_TAG26:
 			qrisTag.Tag26.MerchantScale = getData(v)
+		default:
+			mapUnknownTag := make(map[string]string)
+			mapUnknownTag[k] = getData(v)
+			qrisTag.Tag00.UnknownTag = mapUnknownTag
 		}
 	}
 
@@ -144,6 +155,10 @@ func mapData(map00 map[string]string, map26 map[string]string, map51 map[string]
 			qrisTag.Tag51.QrisID = getData(v)
 		case QRIS_SCALE_TAG51:
 			qrisTag.Tag51.Scale = getData(v)
+		default:
+			mapUnknownTag := make(map[string]string)
+			mapUnknownTag[k] = getData(v)
+			qrisTag.Tag00.UnknownTag = mapUnknownTag
 		}
 	}
 
