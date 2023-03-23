@@ -29,15 +29,15 @@ import (
 )
 
 func main() {
-    rawData := "00020101021226640013COM.MYWEB.WWW01181234567890123456780214123456789012340303UKE5405100005912QRIS WANTUNO6013Jakarta Pusat6304XXXX"
+	rawData := "00020101021126650013ID.CO.BCA.WWW011893600014000094045302150008850009404530303UKE51440014ID.CO.QRIS.WWW0215ID20200340731930303UKE5204507253033605802ID5910PERKAKASKU6007BANDUNG61054027162070703A0163044D4A"
 	qrisReader := qr.NewQrisReader(rawData)
-	tag00, err := qrisReader.Read()
+	qrisTag, err := qrisReader.Read()
 	if err != nil {
 	    fmt.Println(*err)
 	    return
 	}
 	
-    b, err2 := json.Marshal(tag00)
+    b, err2 := json.Marshal(qrisTag)
     if err2 != nil {
         fmt.Println(err2)
         return
@@ -56,5 +56,5 @@ $ go run example.go
 The output will be like below:
 
 ```
-{"Version":"01","Type":"12","Amount":10000,"MerchantOwner":"QRIS WANTUNO","MerchantAddress":"Jakarta Pusat","Checksum":"XXXX","Tag26":{"QrOwner":"COM.MYWEB.WWW","MerchantID":"123456789012345678","MerchantAcquirerID":"12345678901234","MerchantScale":"UKE"}}
+{"tag_00":{"version":"01","type":"11","tag_52":"5072","tag_53":"360","tag_58":"ID","tag_61":"40271","tag_62":"0703A01","amount":0,"merchant_owner":"PERKAKASKU","merchant_address":"BANDUNG","checksum":"4D4A"},"tag_26":{"qr_owner":"ID.CO.BCA.WWW","merchant_id":"936000140000940453","merchant_acquirer_id":"000885000940453","merchant_scale":"UKE"},"tag_51":{"qris_web":"ID.CO.QRIS.WWW","qris_id":"ID2020034073193","scale":"UKE"}}
 ```
