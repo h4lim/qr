@@ -143,7 +143,7 @@ func mapData(map00 map[string]string, map26 map[string]string, map51 map[string]
 		default:
 			mapUnknownTag := make(map[string]string)
 			mapUnknownTag[k] = getData(v)
-			qrisTag.Tag00.UnknownTag = mapUnknownTag
+			qrisTag.Tag26.UnknownTag = mapUnknownTag
 		}
 	}
 
@@ -158,7 +158,7 @@ func mapData(map00 map[string]string, map26 map[string]string, map51 map[string]
 		default:
 			mapUnknownTag := make(map[string]string)
 			mapUnknownTag[k] = getData(v)
-			qrisTag.Tag00.UnknownTag = mapUnknownTag
+			qrisTag.Tag51.UnknownTag = mapUnknownTag
 		}
 	}
 
