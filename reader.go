@@ -1,6 +1,9 @@
 package reader
 
 import (
+	"github.com/tuotoo/qrcode"
+	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -70,6 +73,28 @@ type qrisReaderContext struct {
 
 func NewQrisReader(rawData string) IQrReader {
 	return qrisReaderContext{rawData: rawData}
+}
+
+func NewQrisReaderFromImage(path string, filename string) (*qrisReaderContext, *error) {
+
+	wd, err := os.Getwd()
+	if err != nil {
+		return nil, &err
+	}
+
+	file, err := os.Open(filepath.Join(wd, path, filename))
+	if err != nil {
+		return nil, &err
+	}
+
+	qrCode, err := qrcode.Decode(file)
+	if err != nil {
+		return nil, &err
+	}
+
+	context := qrisReaderContext{rawData: qrCode.Content}
+
+	return &context, nil
 }
 
 func (q qrisReaderContext) Read() (*QrisTag, *error) {
